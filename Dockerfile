@@ -65,7 +65,7 @@ RUN apt-get -y update \
 COPY --from=buildstage /home/build/work/gateway/rmgateway /usr/local/bin
 ADD rmgateway.properties /etc/rmgateway.properties
 
-ENV LOGPATH=/var/log/WebTunnelAgent.log
+ENV LOGPATH=/var/log/rmgateway.log
 ENV LOGLEVEL=information
 ENV LOGCHANNEL=console
 ENV DOMAIN=00000000-0000-0000-0000-000000000000

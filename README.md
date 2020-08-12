@@ -5,9 +5,8 @@
 [macchina.io Remote Manager](https://macchina.io) provides secure remote access to connected devices
 via HTTP or other TCP-based protocols and applications such as secure shell (SSH) or
 Virtual Network Computing (VNC). With macchina.io Remote Manager, any network-connected device
-running the Remote Manager Agent software (*WebTunnelAgent*, contained in this SDK)
-can be securely accessed remotely over the internet from browsers, mobile apps, desktop,
-server or cloud applications.
+running the Remote Manager Agent software can be securely accessed remotely over the internet
+from browsers, mobile apps, desktop, server or cloud applications.
 
 This even works if the device is behind a NAT router, firewall or proxy server.
 The device becomes just another host on the internet, addressable via its own URL and
@@ -36,7 +35,7 @@ The following environment variables are supported:
   - `HTTP_PORT`: The port number where the gateway's web server runs on. Defaults to 8080.
   - `REFLECTOR_URI`: The address of the macchina.io Remote Manager Server (*reflector*).
     Default: https://reflector.my-devices.net
-  - `LOGPATH`: Path to the log file (defaults to `/var/log/WebTunnelAgent.log`); can be
+  - `LOGPATH`: Path to the log file (defaults to `/var/log/rmgateway.log`); can be
     overridden to log to a different file (e.g. in a volume). Note: `LOGCHANNEL` must
     be set to `file` for the logfile to be written.
   - `LOGLEVEL`: Specifies the log level (`debug`, `information`, `notice`, `warning`,
@@ -58,11 +57,12 @@ $ docker build . -t macchina/rmgateway
 The gateway server must be able to connect to the device's web server and/or any other services
 that are to be forwarded. So when running the container, an appropriate network configuration
 for the container must be set up. In many cases, just using the default `bridge` network
-created by Docker will work. For example, assuming that we want to access a web server
-running on host port 8080, and also the host's SSH port:
+created by Docker will work. The gateway server's web user interface runs on port 8080
+(unless configured otherwise via the `HTTP_PORT` environment variable), so you may want
+to map this port to make it accessible from the host system.
 
 ```
-$ docker run -e DOMAIN=eac8b99b-1866-4ef4-8f57-76b655949c29 macchina/rmgateway
+$ docker run -e DOMAIN=eac8b99b-1866-4ef4-8f57-76b655949c29 -p 8080:8080 macchina/rmgateway
 ```
 
 You must replace the value for `DOMAIN` with your specific domain ID which you can
