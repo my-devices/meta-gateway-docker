@@ -64,6 +64,7 @@ RUN apt-get -y update \
 # Copy Agent executable
 COPY --from=buildstage /home/build/work/gateway/rmgateway /usr/local/bin
 ADD rmgateway.properties /etc/rmgateway.properties
+RUN mkdir -p /var/lib/rmgateway
 
 ENV LOGPATH=/var/log/rmgateway.log
 ENV LOGLEVEL=information
@@ -71,5 +72,6 @@ ENV LOGCHANNEL=console
 ENV DOMAIN=00000000-0000-0000-0000-000000000000
 ENV REFLECTOR_URI=https://reflector.my-devices.net/
 ENV HTTP_PORT=8080
+ENV CONFIGDIR=/var/lib/rmgateway
 
 CMD ["/usr/local/bin/rmgateway", "--config=/etc/rmgateway.properties"]

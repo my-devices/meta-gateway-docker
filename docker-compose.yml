@@ -1,0 +1,17 @@
+version: '3.0'
+services:
+  rmgateway:
+    build: .
+    image: "macchina/rmgateway"
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      DOMAIN: 00000000-0000-0000-0000-000000000000
+    volumes:
+      - logvolume:/var/log
+      - datavolume:/var/lib/rmgateway
+
+volumes:
+  logvolume:
+  datavolume:
