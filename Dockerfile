@@ -5,18 +5,20 @@
 #
 # Stage 1: Build
 #
-FROM ubuntu:18.04 as buildstage
+FROM alpine:3.12 as buildstage
 
 # Install required components for building
-RUN apt-get -y update \
- && apt-get -y install \
+RUN apk update \
+ && apk add \
  	git \
     g++ \
-    libssl-dev \
-    cmake
+    linux-headers \
+    cmake \
+    make \
+    openssl-dev
 
 # Create user
-RUN adduser --system --group build
+RUN addgroup -S build && adduser -S -G build build
 
 # Setup Directories
 RUN mkdir -p /home/build/source \
@@ -48,18 +50,20 @@ RUN cd /home/build/work/sdk \
 # Build Gateway
 RUN cd /home/build/work/gateway \
 	&& cmake /home/build/source/gateway -DCMAKE_PREFIX_PATH=/home/build/install \
-	&& cmake --build . --config Release
+	&& cmake --build . --config Release \
+	&& strip rmgateway
 
 #
 # Stage 2: Install
 #
-FROM ubuntu:18.04 as runstage
+FROM alpine:3.12 as runstage
 
-RUN apt-get -y update \
- && apt-get -y install \
-    libssl1.1 \
+RUN apk update \
+ && apk add \
+    libstdc++ \
+    openssl \
     ca-certificates \
-    iputils-ping
+    iputils
 
 # Copy Agent executable
 COPY --from=buildstage /home/build/work/gateway/rmgateway /usr/local/bin
