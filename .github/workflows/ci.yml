@@ -102,7 +102,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       -
-        name: Create Manifest
+        name: Create and Publish Manifest
         run: |
           VERSION=`./version.sh`
           echo Version: ${VERSION}
@@ -116,6 +116,5 @@ jobs:
             --amend macchina/rmgateway:${VERSION}-amd64 \
             --amend macchina/rmgateway:${VERSION}-arm32v7 \
             --amend macchina/rmgateway:${VERSION}-arm64v8
-      -
-        name: Publish Manifest
-        run: docker manifest push -a macchina/rmgateway
+          docker manifest push macchina/rmgateway:latest
+          docker manifest push macchina/rmgateway:${VERSION}
