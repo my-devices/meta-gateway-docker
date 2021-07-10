@@ -15,10 +15,13 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       -
         name: Build Docker Image
-        run: docker build . -t macchina/rmgateway:latest-amd64
+        run: |
+          VERSION=`./version.sh`
+          echo Version: ${VERSION}
+          docker build . -t macchina/rmgateway:latest-amd64 -t macchina/rmgateway:${VERSION}-amd64
       -
         name: Push Docker Image
-        run: docker push macchina/rmgateway:latest-amd64
+        run: docker push -a macchina/rmgateway
 
   docker-build-arm32v7:
     runs-on: ubuntu-20.04
@@ -45,10 +48,13 @@ jobs:
       -
         name: Build Docker Image
         run: |
+          VERSION=`./version.sh`
+          echo Version: ${VERSION}
           docker buildx build \
             --platform linux/arm/v7 \
             --output "type=image,push=true" \
             --tag macchina/rmgateway:latest-arm32v7 \
+            --tag macchina/rmgateway:${VERSION}-arm32v7 \
             --file ./Dockerfile .
 
   docker-build-arm64v8:
@@ -76,10 +82,13 @@ jobs:
       -
         name: Build Docker Image
         run: |
+          VERSION=`./version.sh`
+          echo Version: ${VERSION}
           docker buildx build \
             --platform linux/arm64 \
             --output "type=image,push=true" \
             --tag macchina/rmgateway:latest-arm64v8 \
+            --tag macchina/rmgateway:${VERSION}-arm64v8 \
             --file ./Dockerfile .
 
   docker-manifest:
@@ -95,11 +104,18 @@ jobs:
       -
         name: Create Manifest
         run: |
+          VERSION=`./version.sh`
+          echo Version: ${VERSION}
           docker manifest create \
             macchina/rmgateway:latest \
             --amend macchina/rmgateway:latest-amd64 \
             --amend macchina/rmgateway:latest-arm32v7 \
             --amend macchina/rmgateway:latest-arm64v8
+          docker manifest create \
+            macchina/rmgateway:${VERSION} \
+            --amend macchina/rmgateway:${VERSION}-amd64 \
+            --amend macchina/rmgateway:${VERSION}-arm32v7 \
+            --amend macchina/rmgateway:${VERSION}-arm64v8
       -
         name: Publish Manifest
-        run: docker manifest push macchina/rmgateway:latest
+        run: docker manifest push -a macchina/rmgateway
