@@ -39,6 +39,8 @@ RUN cd /home/build/source \
 RUN cd /home/build/work/sdk \
 	&& cmake /home/build/source/sdk \
 		-DENABLE_JSON=ON \
+        -DENABLE_PAGECOMPILER=ON \
+        -DENABLE_PAGECOMPILER_FILE2PAGE=ON \
 		-DENABLE_WEBTUNNELAGENT=OFF \
 		-DENABLE_WEBTUNNELCLIENT=OFF \
 		-DENABLE_WEBTUNNELSSH=OFF \
