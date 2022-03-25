@@ -66,7 +66,10 @@ $ docker run -e DOMAIN=eac8b99b-1866-4ef4-8f57-76b655949c29 -p 8080:8080 macchin
 ```
 
 You must replace the value for `DOMAIN` with your specific domain ID which you can
-find in the macchina.io REMOTE Server's web application.
+find in the macchina.io REMOTE Server's web application. It's also possible to leave
+the DOMAIN environment variable unset. In this case, when logging in to the gateway,
+it will obtain the default domain assigned to the user account from the macchina.io
+REMOTE server.
 
 Getting the network configuration right can be a bit tricky, as the *Gateway* running in
 the Docker container must be able to connect to network services provided by other containers,
