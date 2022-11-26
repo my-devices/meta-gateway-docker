@@ -77,7 +77,7 @@ ENV LOGLEVEL=information
 ENV LOGCHANNEL=console
 ENV DOMAIN=00000000-0000-0000-0000-000000000000
 ENV TENANT=
-ENV REFLECTOR_URI=https://reflector.my-devices.net/
+ENV REFLECTOR_URI=https://remote.macchina.io
 ENV HTTP_PORT=8080
 ENV CONFIGDIR=/var/lib/rmgateway
 

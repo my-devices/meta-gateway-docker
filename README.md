@@ -34,7 +34,7 @@ The following environment variables are supported:
   - `DOMAIN`: The domain (UUID) of the device. Must be specified.
   - `HTTP_PORT`: The port number where the gateway's web server runs on. Defaults to 8080.
   - `REFLECTOR_URI`: The address of the macchina.io REMOTE Server (*reflector*).
-    Default: https://reflector.my-devices.net
+    Default: https://remote.macchina.io
   - `LOGPATH`: Path to the log file (defaults to `/var/log/rmgateway.log`); can be
     overridden to log to a different file (e.g. in a volume). Note: `LOGCHANNEL` must
     be set to `file` for the logfile to be written.
