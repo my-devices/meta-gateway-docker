@@ -1,5 +1,5 @@
 name: meta-gateway-docker-ci
-on: [push]
+on: [push, workflow_dispatch]
 jobs:
   docker-build-amd64:
     runs-on: ubuntu-20.04
