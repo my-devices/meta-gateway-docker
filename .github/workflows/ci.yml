@@ -1,29 +1,7 @@
 name: meta-gateway-docker-ci
 on: [push, workflow_dispatch]
 jobs:
-  docker-build-amd64:
-    runs-on: ubuntu-20.04
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
-      -
-        name: Login to hub.docker.com
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      -
-        name: Build Docker Image
-        run: |
-          VERSION=`./version.sh`
-          echo Version: ${VERSION}
-          docker build . -t macchina/rmgateway:latest-amd64 -t macchina/rmgateway:${VERSION}-amd64
-      -
-        name: Push Docker Image
-        run: docker push -a macchina/rmgateway
-
-  docker-build-arm32v7:
+  docker-build-multiarch:
     runs-on: ubuntu-20.04
     steps:
       -
@@ -51,73 +29,9 @@ jobs:
           VERSION=`./version.sh`
           echo Version: ${VERSION}
           docker buildx build \
-            --platform linux/arm/v7 \
+            --platform linux/amd64,linux/arm/v7,linux/arm64 \
             --output "type=image,push=true" \
             --tag macchina/rmgateway:latest-arm32v7 \
             --tag macchina/rmgateway:${VERSION}-arm32v7 \
             --file ./Dockerfile .
 
-  docker-build-arm64v8:
-    runs-on: ubuntu-20.04
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      -
-        name: Set up Docker buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v2
-      -
-        name: Available Platforms
-        run: echo ${{ steps.buildx.outputs.platforms }}
-      -
-        name: Login to hub.docker.com
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      -
-        name: Build Docker Image
-        run: |
-          VERSION=`./version.sh`
-          echo Version: ${VERSION}
-          docker buildx build \
-            --platform linux/arm64 \
-            --output "type=image,push=true" \
-            --tag macchina/rmgateway:latest-arm64v8 \
-            --tag macchina/rmgateway:${VERSION}-arm64v8 \
-            --file ./Dockerfile .
-
-  docker-manifest:
-    runs-on: ubuntu-20.04
-    needs: ["docker-build-amd64", "docker-build-arm32v7", "docker-build-arm64v8"]
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
-      -
-        name: Login to hub.docker.com
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      -
-        name: Create and Publish Manifest
-        run: |
-          VERSION=`./version.sh`
-          echo Version: ${VERSION}
-          docker manifest create \
-            macchina/rmgateway:latest \
-            --amend macchina/rmgateway:latest-amd64 \
-            --amend macchina/rmgateway:latest-arm32v7 \
-            --amend macchina/rmgateway:latest-arm64v8
-          docker manifest create \
-            macchina/rmgateway:${VERSION} \
-            --amend macchina/rmgateway:${VERSION}-amd64 \
-            --amend macchina/rmgateway:${VERSION}-arm32v7 \
-            --amend macchina/rmgateway:${VERSION}-arm64v8
-          docker manifest push macchina/rmgateway:latest
-          docker manifest push macchina/rmgateway:${VERSION}
