@@ -31,7 +31,7 @@ jobs:
           docker buildx build \
             --platform linux/amd64,linux/arm/v7,linux/arm64 \
             --output "type=image,push=true" \
-            --tag macchina/rmgateway:latest-arm32v7 \
-            --tag macchina/rmgateway:${VERSION}-arm32v7 \
+            --tag macchina/rmgateway:latest \
+            --tag macchina/rmgateway:${VERSION} \
             --file ./Dockerfile .
 
