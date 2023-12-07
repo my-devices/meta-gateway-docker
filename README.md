@@ -41,6 +41,11 @@ The following environment variables are supported:
   - `LOGLEVEL`: Specifies the log level (`debug`, `information`, `notice`, `warning`,
     `error`, `critical`, `fatal`, `none`). Defaults to `information`.
   - `LOGCHANNEL`: Specifies where log messages go (`file` or `console`). Defaults to `console`.
+  - `CONNECT_TIMEOUT`: The timeout (in seconds) for connecting to the local (forwarded) server socket.
+    Defaults to 10 seconds.
+  - `LOCAL_TIMEOUT`: The timeout (in seconds) for local (forwarded) socket connections. Defaults to 7200 seconds or 2 hours.
+  - `REMOTE_TIMEOUT`: The timeout (in seconds) for the WebTunnel connection to the macchina.io REMOTE server (*reflector*).
+    Defaults to 300 seconds or 5 minutes.
 
 ## Prerequisites
 

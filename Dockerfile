@@ -82,5 +82,8 @@ ENV TENANT=
 ENV REFLECTOR_URI=https://remote.macchina.io
 ENV HTTP_PORT=8080
 ENV CONFIGDIR=/var/lib/rmgateway
+ENV CONNECT_TIMEOUT=10
+ENV LOCAL_TIMEOUT=7200
+ENV REMOTE_TIMEOUT=300
 
 CMD ["/usr/local/bin/rmgateway", "--config=/etc/rmgateway.properties"]
