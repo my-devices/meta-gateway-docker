@@ -27,7 +27,7 @@ There is also a [blog post](https://macchina.io/blog/?p=257) showing step-by-ste
 This repository contains a [Dockerfile](Dockerfile) and related files for building and running
 the [macchina.io REMOTE Gateway](https://github.com/my-devices/gateway) in a Docker container.
 
-The image comes with a configuration file ([rmgateway.properties](rmgateway.properties)) that allows
+The image comes with a configuration file ([`rmgateway.properties`](rmgateway.properties)) that allows
 configuring the most essential settings via environment variables.
 The following environment variables are supported:
 
@@ -66,8 +66,12 @@ created by Docker will work. The gateway server's web user interface runs on por
 (unless configured otherwise via the `HTTP_PORT` environment variable), so you may want
 to map this port to make it accessible from the host system.
 
+Furthermore, a volume needs to be created to store persistent data, mounted to
+`/var/lib/rmgateway`. Otherwise, any device definitions created in the gateway will be
+lost when the container is stopped.
+
 ```
-$ docker run -e DOMAIN=eac8b99b-1866-4ef4-8f57-76b655949c29 -p 8080:8080 macchina/rmgateway
+$ docker run -e DOMAIN=eac8b99b-1866-4ef4-8f57-76b655949c29 -p 8080:8080 -v datavol:/var/lib/rmgateway macchina/rmgateway
 ```
 
 You must replace the value for `DOMAIN` with your specific domain ID which you can
@@ -83,9 +87,12 @@ the host running Docker, or other hosts in the network (depending on your needs)
 Please refer to the Docker documentation on [network containers](https://docs.docker.com/engine/tutorials/networkingcontainers/)
 for more information.
 
+This repository also contains an example [`docker-compose.yml`](docker-compose.yml) file.
+
 
 ## Configuration
 
 The most important configuration settings can be set via environment variables (see above).
-If you need to change other configuration options, edit [rmgateway.properties](rmgateway.properties)
-and rebuild the Docker image.
+If you need to change other configuration options, edit [`rmgateway.properties`](rmgateway.properties)
+and rebuild the Docker image, or use a volume to pass a custom `/etc/rmgateway.properties` to the
+container.
