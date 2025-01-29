@@ -5,7 +5,7 @@
 #
 # Stage 1: Build
 #
-FROM alpine:3.18 as buildstage
+FROM alpine:3.21 AS buildstage
 
 # Install required components for building
 RUN apk update \
@@ -60,7 +60,7 @@ RUN cd /home/build/work/gateway \
 #
 # Stage 2: Install
 #
-FROM alpine:3.18 as runstage
+FROM alpine:3.21 AS runstage
 
 RUN apk update \
  && apk add \
