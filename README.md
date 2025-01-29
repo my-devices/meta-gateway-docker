@@ -84,7 +84,7 @@ Getting the network configuration right can be a bit tricky, as the *Gateway* ru
 the Docker container must be able to connect to network services provided by other containers,
 the host running Docker, or other hosts in the network (depending on your needs).
 
-Please refer to the Docker documentation on [network containers](https://docs.docker.com/engine/tutorials/networkingcontainers/)
+Please refer to the Docker documentation on [networking](https://docs.docker.com/engine/network/)
 for more information.
 
 This repository also contains an example [`docker-compose.yml`](docker-compose.yml) file.
